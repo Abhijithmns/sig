@@ -1,5 +1,7 @@
 import React, { useState, useRef } from "react";
 import "./App.css";
+import micIcon from "./mic.svg";
+import recIcon from "./rec.png";
 
 function App() {
   const [inputText, setInputText] = useState("");
@@ -8,6 +10,13 @@ function App() {
 
   const recognitionRef = useRef(null);
 
+  // Auto-resize textarea
+  const autoResize = (e) => {
+    e.target.style.height = "auto";
+    e.target.style.height = e.target.scrollHeight + "px";
+  };
+
+  // Start mic
   const startListening = () => {
     const SpeechRecognition =
       window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -24,13 +33,11 @@ function App() {
 
     recognition.onresult = (event) => {
       let finalText = "";
-
       for (let i = event.resultIndex; i < event.results.length; i++) {
         if (event.results[i].isFinal) {
           finalText += event.results[i][0].transcript + " ";
         }
       }
-
       setInputText((prev) => prev + finalText);
     };
 
@@ -39,6 +46,7 @@ function App() {
     setListening(true);
   };
 
+  // Stop mic
   const stopListening = () => {
     if (recognitionRef.current) {
       recognitionRef.current.stop();
@@ -46,22 +54,27 @@ function App() {
     setListening(false);
   };
 
+  // Submit to backend
   const handleSubmit = async () => {
-    const response = await fetch("http://127.0.0.1:5000/process", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text: inputText }),
-    });
+    if (!inputText.trim()) return;
 
-    const data = await response.json();
-    setOutputText(data.result);
+    try {
+      const response = await fetch("http://127.0.0.1:5000/process", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: inputText }),
+      });
+
+      const data = await response.json();
+      setOutputText(data.result);
+    } catch {
+      setOutputText("Backend connection failed");
+    }
   };
 
-  // 🧹 CLEAR BUTTON LOGIC
+  // Clear all
   const handleClear = () => {
-    if (recognitionRef.current) {
-      recognitionRef.current.stop();
-    }
+    if (recognitionRef.current) recognitionRef.current.stop();
     setListening(false);
     setInputText("");
     setOutputText("");
@@ -72,32 +85,53 @@ function App() {
       <div className="card">
         <h2 className="title">Inclusive Real-Time Concept Simplifier</h2>
 
-        <div className="input-row">
-          <label>input:</label>
+        {/* Input row */}
+        <div className="input-row horizontal">
+          <label className="input-label">input:</label>
           <textarea
             placeholder="Speak or type lecture content"
             value={inputText}
-            onChange={(e) => setInputText(e.target.value)}
+            onChange={(e) => {
+              setInputText(e.target.value);
+              autoResize(e);
+            }}
           />
         </div>
 
+        {/* Mic button */}
         <div className="btn-row">
           {!listening ? (
-            <button onClick={startListening}>🎤 Start Lecture</button>
+            <button className="mic-btn" onClick={startListening}>
+              <img src={micIcon} alt="mic" className="mic-icon" />
+              Start Lecture
+            </button>
           ) : (
-            <button onClick={stopListening}>⏹ Stop Lecture</button>
+            <button className="mic-btn" onClick={stopListening}>
+              <img src={micIcon} alt="mic" className="mic-icon" />
+              Stop Lecture
+            </button>
           )}
         </div>
 
-        <button className="submit-btn" onClick={handleSubmit}>
-          submit
-        </button>
+        {/* Recording indicator */}
+        {listening && (
+          <div className="recording-indicator">
+            <img src={recIcon} alt="rec" />
+            Recording...
+          </div>
+        )}
 
-        {/* 🧹 CLEAR BUTTON */}
-        <button className="submit-btn" onClick={handleClear}>
-          clear
-        </button>
+        {/* Action buttons */}
+        <div className="action-row">
+          <button className="submit-btn" onClick={handleSubmit}>
+            submit
+          </button>
+          <button className="submit-btn" onClick={handleClear}>
+            clear
+          </button>
+        </div>
 
+        {/* Output */}
         <div className="output-box">
           <p>ELI5 output</p>
           <div className="output-text">{outputText}</div>

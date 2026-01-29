@@ -6,55 +6,63 @@ CORS(app)
 
 @app.route("/process", methods=["POST"])
 def process_text():
-    data = request.get_json()
-    text = data.get("text", "").lower()
+    data = request.get_json(force=True)
+    text = data.get("text", "").lower().strip()
 
     if not text:
-        return jsonify({"result": "No input received."})
+        return jsonify({
+            "result": "Please enter some lecture content."
+        })
 
-    # -------- ELI5 RULE-BASED SIMPLIFIER --------
+    explanations = []
 
-    if "machine learning" in text:
-        result = (
-            "Imagine teaching a child to recognize animals. "
-            "You show many pictures and correct them when they are wrong. "
-            "Over time, the child learns. "
-            "Machine learning works the same way: computers learn from examples."
-        )
-
-    elif "artificial intelligence" in text:
-        result = (
+    # Artificial Intelligence
+    if "ai" in text or "artificial intelligence" in text:
+        explanations.append(
             "Artificial intelligence is like giving a computer a brain. "
-            "It helps machines think, learn, and make decisions like humans."
+            "It helps machines think and make decisions like humans."
         )
 
-    elif "operating system" in text:
-        result = (
-            "An operating system is like a school teacher. "
-            "It makes sure everyone gets a turn and everything runs smoothly "
-            "inside the computer."
+    # Machine Learning
+    if "machine learning" in text:
+        explanations.append(
+            "Machine learning is like teaching a child using examples. "
+            "The more examples you show, the better the child learns."
         )
 
-    elif "data structure" in text:
-        result = (
-            "A data structure is like organizing toys in boxes. "
-            "When toys are well organized, you can find them quickly."
+    # Operating System
+    if "operating system" in text:
+        explanations.append(
+            "An operating system is like a manager. "
+            "It makes sure all parts of the computer work together properly."
         )
 
-    elif "computer network" in text:
-        result = (
-            "A computer network is like a group of friends passing notes. "
-            "It helps computers share information with each other."
+    # Data Structures
+    if "data structure" in text:
+        explanations.append(
+            "A data structure is like organizing toys into boxes "
+            "so you can find them easily."
         )
 
-    else:
-        result = (
-            "This concept is being captured from the lecture. "
-            "ELI5 explanations help students understand complex topics easily."
+    # Computer Networks
+    if "network" in text:
+        explanations.append(
+            "A computer network is like friends talking to each other "
+            "to share information."
         )
 
-    return jsonify({"result": result})
+    # Fallback
+    if not explanations:
+        explanations.append(
+            "This lecture topic is being explained in a simple way "
+            "to help beginners understand."
+        )
+
+    return jsonify({
+        "result": "\n\n".join(explanations)
+    })
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    print("✅ Offline ELI5 backend running")
+    app.run(host="127.0.0.1", port=5000, debug=False)
