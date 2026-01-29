@@ -13,21 +13,25 @@ function App() {
       window.SpeechRecognition || window.webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
-      alert("Speech Recognition not supported in this browser");
+      alert("Speech Recognition not supported");
       return;
     }
 
     const recognition = new SpeechRecognition();
     recognition.continuous = true;
-    recognition.interimResults = true;
+    recognition.interimResults = false;
     recognition.lang = "en-US";
 
     recognition.onresult = (event) => {
-      let transcript = "";
+      let finalText = "";
+
       for (let i = event.resultIndex; i < event.results.length; i++) {
-        transcript += event.results[i][0].transcript;
+        if (event.results[i].isFinal) {
+          finalText += event.results[i][0].transcript + " ";
+        }
       }
-      setInputText((prev) => prev + " " + transcript);
+
+      setInputText((prev) => prev + finalText);
     };
 
     recognition.start();
@@ -36,25 +40,42 @@ function App() {
   };
 
   const stopListening = () => {
-    recognitionRef.current.stop();
+    if (recognitionRef.current) {
+      recognitionRef.current.stop();
+    }
     setListening(false);
   };
 
-  const handleSubmit = () => {
-    // For now just move input to output
-    // Replace this with backend / ML call later
-    setOutputText(inputText);
+  const handleSubmit = async () => {
+    const response = await fetch("http://127.0.0.1:5000/process", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: inputText }),
+    });
+
+    const data = await response.json();
+    setOutputText(data.result);
+  };
+
+  // 🧹 CLEAR BUTTON LOGIC
+  const handleClear = () => {
+    if (recognitionRef.current) {
+      recognitionRef.current.stop();
+    }
+    setListening(false);
+    setInputText("");
+    setOutputText("");
   };
 
   return (
     <div className="page">
       <div className="card">
-        <h2 className="title">Live Lecture / Text Input</h2>
+        <h2 className="title">Inclusive Real-Time Concept Simplifier</h2>
 
         <div className="input-row">
           <label>input:</label>
           <textarea
-            placeholder="Type text OR use microphone"
+            placeholder="Speak or type lecture content"
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
           />
@@ -72,8 +93,13 @@ function App() {
           submit
         </button>
 
+        {/* 🧹 CLEAR BUTTON */}
+        <button className="submit-btn" onClick={handleClear}>
+          clear
+        </button>
+
         <div className="output-box">
-          <p>output</p>
+          <p>ELI5 output</p>
           <div className="output-text">{outputText}</div>
         </div>
       </div>
