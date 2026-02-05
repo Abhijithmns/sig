@@ -51,7 +51,7 @@ app.post('/api/eli5', async (req, res) => {
         headers: {
           'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
           'Content-Type': 'application/json',
-          'HTTP-Referer': 'http://localhost:5173', // frontend URL
+          'HTTP-Referer': 'https://sig-eli5.netlify.app/', // frontend URL
           'X-Title': 'ELI5 Lecture Assistant'
         },
         body: JSON.stringify({
