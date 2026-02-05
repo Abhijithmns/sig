@@ -1,73 +1,81 @@
-# Welcome to your Lovable project
+# ELI5 Assistant — Live Lecture Simplifier
 
-## Project info
+ELI5 Assistant is a real-time lecture assistance tool that listens during live classes and explains complex concepts instantly using simple, age-appropriate explanations.
 
-**URL**: https://lovable.dev/projects/a37d1d0d-556a-4b16-af20-d0385b80500f
+The goal of this project is to help students understand difficult material as it is being taught, rather than after the lecture ends.
 
-## How can I edit this code?
+---
 
-There are several ways of editing your application.
+## Overview
 
-**Use Lovable**
+During live lectures, students often miss important ideas due to fast pacing, unfamiliar terminology, or cognitive overload. ELI5 Assistant addresses this problem by providing real-time explanations that simplify complex concepts while the lecture is ongoing.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/a37d1d0d-556a-4b16-af20-d0385b80500f) and start prompting.
+The system listens to spoken lecture content, converts speech to text, and generates simplified explanations on demand in a clean, distraction-free interface.
 
-Changes made via Lovable will be committed automatically to this repo.
+This project focuses on accessibility, inclusivity, and real-time comprehension.
 
-**Use your preferred IDE**
+---
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## Features
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+- Real-time speech recognition using the Web Speech API
+- Live conversion of speech to text
+- On-demand simplification of lecture content
+- Multiple explanation levels:
+  - Explain Like I’m 5
+  - Explain Like I’m 10
+  - Explain Like I’m 15
+  - Concise summary
+- Minimal and calm user interface designed for classroom use
+- Backend model fallback to handle rate limits
+- Secure configuration using environment variables
 
-Follow these steps:
+---
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+## Tech Stack
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
+### Frontend
+- React with TypeScript
 - Vite
-- TypeScript
-- React
-- shadcn-ui
 - Tailwind CSS
+- Shadcn/UI
+- Web Speech API
+- Outfit font for readability and consistency
 
-## How can I deploy this project?
+### Backend
+- Node.js
+- Express
+- OpenRouter API
+- REST-based JSON API
 
-Simply open [Lovable](https://lovable.dev/projects/a37d1d0d-556a-4b16-af20-d0385b80500f) and click on Share -> Publish.
+---
 
-## Can I connect a custom domain to my Lovable project?
+## AI Model
 
-Yes, you can!
+The project uses **TNG-R1T Chimera (free)** via **OpenRouter** to generate simplified explanations.
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+This model was chosen because it produces clear, structured responses and performs well for explanation-focused tasks. It is suitable for real-time use in a live lecture setting.
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Since the model is accessed through a free tier, it may occasionally be rate-limited. To ensure reliability, the backend includes fallback logic that switches to alternative models when necessary.
+
+---
+
+## Project Structure
+
+```txt
+sig/
+├─ backend/
+│  ├─ server.js
+│  ├─ package.json
+│  └─ .env
+│
+└─ frontend/
+   ├─ src/
+   │  ├─ components/
+   │  ├─ services/
+   │  ├─ hooks/
+   │  └─ pages/
+   ├─ public/
+   ├─ index.html
+   ├─ tailwind.config.ts
+   └─ vite.config.ts
