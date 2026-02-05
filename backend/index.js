@@ -55,7 +55,7 @@ app.post('/api/eli5', async (req, res) => {
           'X-Title': 'ELI5 Lecture Assistant'
         },
         body: JSON.stringify({
-          model: 'tngtech/tng-r1t-chimera:free',
+          model: 'meta-llama/llama-3.3-70b-instruct:free',
           messages: [
             {
               role: 'system',
