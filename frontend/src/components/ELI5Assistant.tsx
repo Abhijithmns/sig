@@ -3,7 +3,7 @@ import { Mic, MicOff, Loader2, Sparkles, AlertCircle, Volume2 } from 'lucide-rea
 import { useSpeechRecognition } from '@/hooks/useSpeechRecognition';
 import { getELI5Explanation, checkBackendHealth, ComplexityLevel } from '@/services/eli5Service';
 
-const complexityOptions: { value: ComplexityLevel; label: string; emoji: string }[] = [
+const complexityOptions: { value: ComplexityLevel; label: string }[] = [
   { value: 'eli5', label: 'Like I\'m 5' },
   { value: 'eli10', label: 'Like I\'m 10' },
   { value: 'eli15', label: 'Like I\'m 15' },
