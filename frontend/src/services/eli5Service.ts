@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:3001';
+const API_BASE_URL = 'https://sig-ey38.onrender.com';
 
 export type ComplexityLevel = 'eli5' | 'eli10' | 'eli15' | 'summary';
 
