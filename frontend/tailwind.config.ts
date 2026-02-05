@@ -22,9 +22,13 @@ export default {
         "sm-590": "590px",
       },
       fontFamily: {
-        sans: ["Supreme", "system-ui", "-apple-system", "sans-serif"],
-        serif: ["Lora", "Georgia", "serif"],
-      },
+      // Main UI + explanations
+      sans: ['"Outfit"', "system-ui", "-apple-system", "sans-serif"],
+
+      // Optional: keep serif if needed later
+      serif: ["Georgia", "serif"],
+    },
+      
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

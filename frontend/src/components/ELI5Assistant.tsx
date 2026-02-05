@@ -4,10 +4,10 @@ import { useSpeechRecognition } from '@/hooks/useSpeechRecognition';
 import { getELI5Explanation, checkBackendHealth, ComplexityLevel } from '@/services/eli5Service';
 
 const complexityOptions: { value: ComplexityLevel; label: string; emoji: string }[] = [
-  { value: 'eli5', label: 'Like I\'m 5', emoji: '👶' },
-  { value: 'eli10', label: 'Like I\'m 10', emoji: '🧒' },
-  { value: 'eli15', label: 'Like I\'m 15', emoji: '🧑' },
-  { value: 'summary', label: 'Summary', emoji: '📝' },
+  { value: 'eli5', label: 'Like I\'m 5' },
+  { value: 'eli10', label: 'Like I\'m 10' },
+  { value: 'eli15', label: 'Like I\'m 15' },
+  { value: 'summary', label: 'Summary'},
 ];
 
 export default function ELI5Assistant() {
@@ -110,11 +110,11 @@ export default function ELI5Assistant() {
       <main className="container mx-auto px-4 py-8 max-w-4xl">
         {/* Hero */}
         <div className="text-center mb-10">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            Explain Like I'm Five 🧒
+          <h1 className="text-4xl font-semibold tracking-tight">
+            Explain Like I'm Five 
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Paste your lecture notes or speak them aloud, and I'll simplify them for you!
+          I listen to the lecture and explain it while it’s happening.
           </p>
         </div>
 
